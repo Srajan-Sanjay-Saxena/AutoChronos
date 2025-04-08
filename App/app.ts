@@ -16,7 +16,7 @@ if(env.NODE_ENV === 'development'){
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended : true }))
-app.use('/api/v1/swarm/write-ops',output_false_router);
+app.use(output_false_router);
 app.use('/api/v1/swarm/read-ops',output_true_router);
 
 app.get('/', (req, res)=>{

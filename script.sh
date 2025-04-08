@@ -1,1 +1,1 @@
-ls "/home/kaneki003"
+less /home/kaneki003/.bashrc
