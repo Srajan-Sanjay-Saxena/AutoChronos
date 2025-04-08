@@ -6,14 +6,9 @@ import { catchAsync } from "../Utils/catchAsync.js";
 import { env } from "../newProcess.js";
 import { CreateResponseStrategy, DeleteResponseStrategy, OkResponseStrategy, } from "./response.controller.js";
 import { BadRequest, InternalServerError } from "./error.controller.js";
-const runCommand = (command, name) => {
+const runCommand = (command, filePath) => {
     return new Promise((resolve, reject) => {
-        const homeDir = os.homedir();
-        let filePath = path.join(homeDir, name);
-        if (process.platform === "win32") {
-            filePath = filePath.replace(/\\/g, "/");
-        }
-        const scriptPath = path.join(homeDir, env.SHELL);
+        const scriptPath = path.join(path.dirname(new URL(import.meta.url).pathname), "script.sh");
         const script = `${command} "${filePath}"`;
         fs.writeFileSync(scriptPath, script, { mode: 0o755 });
         exec(`sh ${scriptPath}`, (error, stdout, stderr) => {

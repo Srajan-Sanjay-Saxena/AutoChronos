@@ -1,8 +1,8 @@
 import express from 'express';
-import { deletefolder, createfile, createfolder, deletefile } from '../controllers/output_false.js';
+import { deleteFolder, createFile, createFolder, deleteFile } from '../controllers/output_false.js';
 const router = express.Router();
-router.post('/createfile', createfile);
-router.post('/deletefile', deletefile);
-router.post('/createfolder', createfolder);
-router.post('/deletefolder', deletefolder);
+router.post('/createFile', createFile);
+router.post('/deleteFile', deleteFile);
+router.post('/createFolder', createFolder);
+router.post('/deleteFolder', deleteFolder);
 export default router;

@@ -15,15 +15,14 @@ import { BadRequest, InternalServerError } from "./error.controller.js";
 
 const runCommand = (
   command: "touch" | "mkdir" | "rm" | "rm -rf",
-  name: string
+  filePath: string
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    const homeDir = os.homedir();
-    let filePath = path.join(homeDir, name);
-    if (process.platform === "win32") {
-      filePath = filePath.replace(/\\/g, "/");
-    }
-    const scriptPath = path.join(homeDir, env.SHELL);
+    
+    const scriptPath = path.join(
+      path.dirname(new URL(import.meta.url).pathname),
+      "script.sh"
+    );
     const script = `${command} "${filePath}"`;
 
     fs.writeFileSync(scriptPath, script, { mode: 0o755 });
