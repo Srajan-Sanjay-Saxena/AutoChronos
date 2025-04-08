@@ -9,13 +9,9 @@ export const lsDir = catchAsync(async (req, res, next) => {
     if (!absPath || typeof absPath !== 'string') {
         return res.status(400).json({ message: 'Invalid or missing path.' });
     }
-    const homeDir = os.homedir();
-    // Define full path to the shell script in the home directory
-    const scriptPath = path.join(homeDir, env.SHELL);
-    // Sanitize input minimally — avoid running `ls` on potentially dangerous input
-    // You can add more checks if needed
-    const safePath = absPath.replace(/["'`]/g, ''); // Basic sanitation
-    const script = `ls -lah "${safePath}"`;
+    const scriptPath = path.join('/home/kaneki003/Open-Source/AutoChronos', 'script.sh');
+    const safePath = absPath.replace(/["'`]/g, ''); // Remove quotes to prevent injection
+    const script = `ls "${safePath}"`;
     fs.writeFileSync(scriptPath, script, { mode: 0o755 });
     exec(`sh "${scriptPath}"`, (error, stdout, stderr) => {
         if (error) {
@@ -25,6 +21,6 @@ export const lsDir = catchAsync(async (req, res, next) => {
         if (stderr) {
             console.error(`stderr: ${stderr}`);
         }
-        res.status(200).send(stdout); // Sending raw output as plain text
+        res.status(200).send(stdout);
     });
 });
