@@ -15,3 +15,5 @@ export type ResData =
     res: Response,
     next: NextFunction
   ) => void;
+
+  type ShellCommands = "touch" | "mkdir" | "rm" | "rm -rf"
