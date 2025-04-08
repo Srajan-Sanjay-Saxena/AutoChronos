@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { exec } from 'child_process';
 import path from 'path';
-import os from 'os';
+import os, { homedir } from 'os';
 import { catchAsync } from '../Utils/catchAsync.js';
 import type { Request, Response, NextFunction } from 'express';
 import { env } from '../newProcess.js';
@@ -10,12 +10,15 @@ import type { ModifiedRequest } from '../Types/extras.types.js';
 export const createfile = catchAsync(async(req: ModifiedRequest, res: Response, next: NextFunction)=>{
   // Get the home directory
   const homeDir = os.homedir();
-
   // Define full path to the shell script in the home directory
   const scriptPath = path.join(homeDir, env.SHELL);
   const filename = req.body.filename;
+  const filePath = path.join(homeDir, filename);
   console.log(filename);
-  const script = `touch ${filename}`;
+  const script = `touch "${filePath}"`;
+
+  console.log(script);
+
   // Step 1: Create the shell script with the content `touch hello.txt`
   fs.writeFileSync(scriptPath, script, { mode: 0o755 });
   console.log(`Shell script created at: ${scriptPath}`);
