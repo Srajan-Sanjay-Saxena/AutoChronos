@@ -7,7 +7,7 @@ dotenv.config();
 export const env = createEnv({
   server: {
     PORT: z.string(),
-    NODE_ENV : z.enum(['development' , 'production']), 
+    NODE_ENV : z.enum(['development' , 'production']),
     SHELL : z.string()
   },
   clientPrefix: "",
