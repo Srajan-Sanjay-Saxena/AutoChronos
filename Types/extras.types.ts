@@ -7,7 +7,7 @@ export type ResData =
   | undefined;
 
   export interface ModifiedRequest extends Request {
-    app: Application;
+    filename : string
   }
 
   export type AsyncHandler = (
