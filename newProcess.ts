@@ -7,6 +7,7 @@ dotenv.config(); // ✅ Make sure this runs before accessing process.env
 export const env = createEnv({
   server: {
     PORT: z.string(),
+    NODE_ENV : z.enum(['development' , 'production'])
   },
   clientPrefix: "",
   client : {},
