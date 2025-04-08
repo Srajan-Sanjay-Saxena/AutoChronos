@@ -18,29 +18,42 @@ const runCommand = (
   filePath: string
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    
-    const scriptPath = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "script.sh"
-    );
-    const script = `${command} "${filePath}"`;
+    const isWindows = process.platform === "win32";
 
-    fs.writeFileSync(scriptPath, script, { mode: 0o755 });
+    const adjustedPath = isWindows ? filePath.replace(/\//g, "\\") : filePath;
 
-    exec(`sh ${scriptPath}`, (error, stdout, stderr) => {
-      if (error) {
-        // console.error(`Error executing script: ${error.message}`);
-        return reject(new Error(error.message));
+    // Build the actual command to run based on platform
+    let fullCommand = "";
+
+    if (isWindows) {
+      switch (command) {
+        case "touch":
+          fullCommand = `type nul > "${adjustedPath}"`;
+          break;
+        case "mkdir":
+          fullCommand = `mkdir "${adjustedPath}"`;
+          break;
+        case "rm":
+          fullCommand = `del "${adjustedPath}"`;
+          break;
+        case "rm -rf":
+          fullCommand = `rmdir /s /q "${adjustedPath}"`;
+          break;
+        default:
+          return reject(new Error(`Unsupported command: ${command}`));
       }
-      if (stderr) {
-        // console.error(`stderr: ${stderr}`);
-        return reject(new Error(stderr));
-      }
-      // console.log('Shell script executed successfully.');
+    } else {
+      fullCommand = `${command} "${adjustedPath}"`;
+    }
+
+    exec(fullCommand, (error, stdout, stderr) => {
+      if (error) return reject(new Error(error.message));
+      if (stderr) return reject(new Error(stderr));
       resolve();
     });
   });
 };
+
 
 export const createFile = catchAsync(
   async (req: ModifiedRequest, res: Response, next: NextFunction) => {

@@ -8,19 +8,36 @@ import { CreateResponseStrategy, DeleteResponseStrategy, OkResponseStrategy, } f
 import { BadRequest, InternalServerError } from "./error.controller.js";
 const runCommand = (command, filePath) => {
     return new Promise((resolve, reject) => {
-        const scriptPath = path.join(path.dirname(new URL(import.meta.url).pathname), "script.sh");
-        const script = `${command} "${filePath}"`;
-        fs.writeFileSync(scriptPath, script, { mode: 0o755 });
-        exec(`sh ${scriptPath}`, (error, stdout, stderr) => {
-            if (error) {
-                // console.error(`Error executing script: ${error.message}`);
+        const isWindows = process.platform === "win32";
+        const adjustedPath = isWindows ? filePath.replace(/\//g, "\\") : filePath;
+        // Build the actual command to run based on platform
+        let fullCommand = "";
+        if (isWindows) {
+            switch (command) {
+                case "touch":
+                    fullCommand = `type nul > "${adjustedPath}"`;
+                    break;
+                case "mkdir":
+                    fullCommand = `mkdir "${adjustedPath}"`;
+                    break;
+                case "rm":
+                    fullCommand = `del "${adjustedPath}"`;
+                    break;
+                case "rm -rf":
+                    fullCommand = `rmdir /s /q "${adjustedPath}"`;
+                    break;
+                default:
+                    return reject(new Error(`Unsupported command: ${command}`));
+            }
+        }
+        else {
+            fullCommand = `${command} "${adjustedPath}"`;
+        }
+        exec(fullCommand, (error, stdout, stderr) => {
+            if (error)
                 return reject(new Error(error.message));
-            }
-            if (stderr) {
-                // console.error(`stderr: ${stderr}`);
+            if (stderr)
                 return reject(new Error(stderr));
-            }
-            // console.log('Shell script executed successfully.');
             resolve();
         });
     });
