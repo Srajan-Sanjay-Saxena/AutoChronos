@@ -122,6 +122,6 @@ const readOpsWorker = async () => {
     readWorker.on("failed", (job, error) => {
         console.error(`Job ${job.id} failed with error:`, error);
     });
-    console.log('Read operations worker started, listening to the "read-ops" queue.');
+    console.log('Write operations worker started, listening to the "write-ops" queue.');
 };
 export default { readOpsWorker, writeOpsWorker };
