@@ -1,1 +1,1 @@
-ls "/home/kaneki003"
+mkdir "C:/Users/siddh/OneDrive/Desktop/SomeD"

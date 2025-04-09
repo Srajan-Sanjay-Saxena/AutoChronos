@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
+import { mongoInstance } from "../Mongo/Connection.js";
 
-const crud = new mongoose.Schema(
+export const crud = new mongoose.Schema(
     {
         machineId: {
             type: String,
@@ -20,4 +21,4 @@ const crud = new mongoose.Schema(
     }
 )
 
-export const Command = mongoose.model('Command', crud);
+export const Command = mongoInstance.getModel<typeof crud,{},{}>('Command', crud);

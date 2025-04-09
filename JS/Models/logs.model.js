@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const crud = new mongoose.Schema({
+import { mongoInstance } from "../Mongo/Connection.js";
+export const crud = new mongoose.Schema({
     machineId: {
         type: String,
         required: true
@@ -15,4 +16,4 @@ const crud = new mongoose.Schema({
 }, {
     timestamps: true
 });
-export const Command = mongoose.model('Command', crud);
+export const Command = mongoInstance.getModel('Command', crud);
