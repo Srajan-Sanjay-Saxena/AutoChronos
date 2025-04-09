@@ -1,14 +1,7 @@
-import fs from "fs";
 import { exec } from "child_process";
+import fs from "fs";
 import path from "path";
-import os from "os";
-import { catchAsync } from "../../../Utils/catchAsync.js";
-import type { Response, NextFunction } from "express";
-import { env } from "../../../newProcess.js";
-import type {
-  ModifiedRequest,
-  ShellCommands,
-} from "../../../Types/extras.types.js";
+import type { ShellCommands } from "../../../Types/extras.types.js";
 import {
   CreateResponseStrategy,
   DeleteResponseStrategy,
@@ -22,7 +15,7 @@ const runCommand = (
   filePath: string
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    const hostName= getHostName();
+    const hostName = getHostName();
     const scriptPath = path.join(
       path.dirname(new URL(import.meta.url).pathname),
       "script.sh"

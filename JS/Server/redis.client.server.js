@@ -1,5 +1,5 @@
 import { createClient } from "redis";
-import worker from "../App/worker.js";
+import worker from "../App/worker.bull.js";
 export const redisClient = createClient({
     url: "redis://localhost:6379",
 });

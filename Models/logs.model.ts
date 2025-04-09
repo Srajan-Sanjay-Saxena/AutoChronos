@@ -1,4 +1,4 @@
 import mongoose from "mongoose"
-export const logsSchema = new mongoose.Schema({
+export const readOpsSchema = new mongoose.Schema({
 
 })

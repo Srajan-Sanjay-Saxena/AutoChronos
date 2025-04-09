@@ -15,8 +15,8 @@ class Email {
         extName: ".handlebars",
         viewPath: path.resolve("./views"),
     };
-    constructor(user) {
-        this.to = user.email;
+    constructor(emailTo) {
+        this.to = emailTo;
         this.from = env.EMAIL_FROM;
     }
     static transporter() {
@@ -33,11 +33,19 @@ class Email {
         });
     }
 }
-export class TwoFAEmailVerification extends Email {
-    token;
-    constructor(user, token) {
-        super(user);
-        this.token = token;
+export class DiskSpaceNotification extends Email {
+    containerId;
+    totalSpace;
+    usedSpace;
+    freeSpace;
+    pathName;
+    constructor(emailTo, containerId, totalSpace, usedSpace, freeSpace, pathName) {
+        super(emailTo);
+        this.containerId = containerId;
+        this.freeSpace = freeSpace;
+        this.pathName = pathName;
+        this.usedSpace = usedSpace;
+        this.totalSpace = totalSpace;
     }
     sendEmail(subject, template, next) {
         const transporter = Email.transporter();

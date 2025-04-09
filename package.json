@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start-express": "nodemon ./JS/Server/express.server.js",
-    "start-redis" : "nodemon ./JS/Server/redis.client.server.js"
+    "start-redis" : "nodemon ./JS/Server/redis.worker.server.js"
   },
   "keywords": [],
   "author": "",

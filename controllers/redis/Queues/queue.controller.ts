@@ -4,6 +4,7 @@ import { BadRequest } from "../../error.controller.js";
 import { catchAsync } from "../../../Utils/catchAsync.js";
 import { CreateResponseStrategy } from "../../response.controller.js";
 
+
 const emailQueue = new Queue("email-ops", {
   connection: {
     host: "localhost",
@@ -25,33 +26,6 @@ const readOpsQueue = new Queue("read-ops", {
   },
 });
 
-//* Cron time operations
-const addEmailQueue = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { emailTo, subject, cronTime } = req.body;
-    if (!emailTo) {
-      return next(
-        new BadRequest().handleResponse(res, {
-          info: "Email recipient not given",
-        })
-      );
-    } else if (!cronTime) {
-      return next(
-        new BadRequest().handleResponse(res, { info: "Cron time not given" })
-      );
-    }
-    const finalSubject = subject || "Disk Usage";
-    const job = await emailQueue.add("email-service", {
-      emailTo,
-      finalSubject,
-      cronTime,
-    });
-    new CreateResponseStrategy().handleResponse(res, {
-      info: "Job added successfully to email queue",
-      id: job.id,
-    });
-  }
-);
 
 //* One time operations
 const addWriteOpsQueue = catchAsync(
@@ -64,7 +38,7 @@ const addWriteOpsQueue = catchAsync(
     ];
     const userTaskName = req.body.taskName;
     const pathName = req.body.targetName;
-    // console.log("BODY IS:",req.body)
+    console.log("BODY IS:", req.body);
     if (!pathName)
       return next(
         new BadRequest().handleResponse(res, { info: "Target name not given" })
@@ -75,7 +49,7 @@ const addWriteOpsQueue = catchAsync(
           info: "Invalid crud operation given",
         })
       );
-
+      //TODO : Mongo model bana logs ka , 2->model , 1 -->write 2--> read
     const job = await writeOpsQueue.add(userTaskName, { pathName });
 
     new CreateResponseStrategy().handleResponse(res, {
@@ -134,4 +108,4 @@ const addReadOpsQueue = catchAsync(
   }
 );
 
-export default { addEmailQueue, addReadOpsQueue, addWriteOpsQueue };
+export default {  addReadOpsQueue, addWriteOpsQueue };

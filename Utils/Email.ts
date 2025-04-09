@@ -25,8 +25,8 @@ abstract class Email implements EmailService {
     viewPath: path.resolve("./views"),
   };
 
-  protected constructor(user: UserNamespace.UserDoc) {
-    this.to = user.email as EmailBrand;
+  protected constructor(emailTo: string) {
+    this.to = emailTo as EmailBrand;
     this.from = env.EMAIL_FROM as EmailBrand;
   }
 
@@ -51,11 +51,19 @@ abstract class Email implements EmailService {
   ): void;
 }
 
-export class TwoFAEmailVerification extends Email {
-  public token: number;
-  constructor(user: UserNamespace.UserDoc, token: number) {
-    super(user);
-    this.token = token;
+export class DiskSpaceNotification extends Email {
+  public containerId : string;
+  public totalSpace : string;
+  public usedSpace : string;
+  public freeSpace : string;
+  public pathName : string;
+  constructor(emailTo: string, containerId :string , totalSpace : string , usedSpace : string , freeSpace : string , pathName : string) {
+    super(emailTo);
+    this.containerId = containerId;
+    this.freeSpace = freeSpace;
+    this.pathName = pathName;
+    this.usedSpace = usedSpace;
+    this.totalSpace = totalSpace;
   }
   override sendEmail(
     subject: string,
