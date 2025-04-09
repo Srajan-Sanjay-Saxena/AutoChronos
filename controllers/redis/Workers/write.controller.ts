@@ -15,12 +15,14 @@ import {
   OkResponseStrategy,
 } from "../../response.controller.js";
 import { BadRequest, InternalServerError } from "../../error.controller.js";
+import { getHostName } from "../../../Utils/hostName.js";
 
 const runCommand = (
   command: ShellCommands,
   filePath: string
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
+    const hostName= getHostName();
     const scriptPath = path.join(
       path.dirname(new URL(import.meta.url).pathname),
       "script.sh"
