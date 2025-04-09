@@ -5,7 +5,9 @@ import { dbResolver } from "./dbResolver.js";
 import { env } from "../newProcess.js";
 import type { MethodBase, VirtualBase } from "../Types/extras.types.js";
 
-const DB = dbResolver(env.DB);
+// const DB = dbResolver(env.DB);
+const DB = env.DB;
+// console.log(DB);
 
 class MongoDBConnection {
   private static mongoInstance: MongoDBConnection;
