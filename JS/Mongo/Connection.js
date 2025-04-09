@@ -1,7 +1,9 @@
 import mongoose, { Model, Schema } from "mongoose";
 import { dbResolver } from "./dbResolver.js";
 import { env } from "../newProcess.js";
-const DB = dbResolver(env.DB);
+// const DB = dbResolver(env.DB);
+const DB = env.DB;
+// console.log(DB);
 class MongoDBConnection {
     static mongoInstance;
     dbConn;

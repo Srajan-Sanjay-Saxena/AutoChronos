@@ -7,15 +7,19 @@ export const env = createEnv({
         PORT: z.string(),
         NODE_ENV: z.enum(["development", "production"]),
         //* DB COnnections details------------------------------------------
-        DB: z
-            .string()
-            .refine((value) => value.includes("<username>") && value.includes("<password>"), {
-            message: "DB string must contain <username> and <password>",
-        }),
-        USERNAME: z.string().refine((value) => value.length >= 3, {
-            message: "Username must be at least 3 characters long"
-        }),
-        PASSWORD: z.string(),
+        // DB: z
+        //   .string()
+        //   .refine(
+        //     (value) => value.includes("<username>") && value.includes("<password>"),
+        //     {
+        //       message: "DB string must contain <username> and <password>",
+        //     }
+        //   ),
+        // USERNAME: z.string().refine((value) => value.length >= 3 , {
+        //     message : "Username must be at least 3 characters long"
+        // }),
+        // PASSWORD : z.string(),
+        DB: z.string(),
         //* JWT Details---------------------------------------------
         JWT_SECRET_KEY: z.string(),
         JWT_EXPIRES_AT: z.string().refine(value => value.endsWith("d")),
