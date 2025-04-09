@@ -16,4 +16,12 @@ export type ResData =
     next: NextFunction
   ) => void;
 
-  type ShellCommands = "touch" | "mkdir" | "rm" | "rm -rf"
+  export type ShellCommands = "touch" | "mkdir" | "rm" | "rm -rf"
+
+  
+export type MethodBase = Record<string, (...args: any[]) => any>;
+export type VirtualBase = Record<string, any>;
+
+declare const brand : unique symbol
+type Brand<T , TBrand> = T & { [brand] : TBrand }
+export type EmailBrand= Brand<string , "Email">

@@ -1,1 +1,0 @@
-touch "/home/kaneki003/hello.txt"
