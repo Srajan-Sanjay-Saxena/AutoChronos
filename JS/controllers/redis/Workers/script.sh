@@ -1,1 +1,0 @@
-mkdir "/Users/srajansaxena/Desktop/autochronos-testing"
