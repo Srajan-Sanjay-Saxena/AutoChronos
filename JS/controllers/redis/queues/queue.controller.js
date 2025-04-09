@@ -52,6 +52,7 @@ const addWriteOpsQueue = catchAsync(async (req, res, next) => {
     ];
     const userTaskName = req.body.taskName;
     const pathName = req.body.targetName;
+    console.log("BODY IS:", req.body);
     if (!pathName)
         return next(new BadRequest().handleResponse(res, { info: "Target name not given" }));
     if (!taskName.includes(userTaskName))
@@ -80,14 +81,21 @@ const addReadOpsQueue = catchAsync(async (req, res, next) => {
                     info: "Target name not given",
                 }));
             job = await readOpsQueue.add("listing-directory", { pathName });
+            break;
         case "history":
             job = await readOpsQueue.add("command-history", {});
+            break;
         case "fileRead":
             if (!pathName)
                 return next(new BadRequest().handleResponse(res, {
                     info: "Target name not given",
                 }));
             job = await readOpsQueue.add("file-read", { pathName });
+            break;
+        default:
+            return next(new BadRequest().handleResponse(res, {
+                info: "None of job matches our servings",
+            }));
     }
     new CreateResponseStrategy().handleResponse(res, {
         info: "Job added successfully to read-ops queue",

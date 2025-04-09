@@ -4,7 +4,6 @@ import { BadRequest } from "../../error.controller.js";
 import { catchAsync } from "../../../Utils/catchAsync.js";
 import { CreateResponseStrategy } from "../../response.controller.js";
 
-
 const emailQueue = new Queue("email-ops", {
   connection: {
     host: "localhost",
@@ -65,7 +64,7 @@ const addWriteOpsQueue = catchAsync(
     ];
     const userTaskName = req.body.taskName;
     const pathName = req.body.targetName;
-
+    console.log("BODY IS:",req.body)
     if (!pathName)
       return next(
         new BadRequest().handleResponse(res, { info: "Target name not given" })
@@ -107,8 +106,10 @@ const addReadOpsQueue = catchAsync(
             })
           );
         job = await readOpsQueue.add("listing-directory", { pathName });
+        break;
       case "history":
         job = await readOpsQueue.add("command-history", {});
+        break;
       case "fileRead":
         if (!pathName)
           return next(
@@ -117,6 +118,13 @@ const addReadOpsQueue = catchAsync(
             })
           );
         job = await readOpsQueue.add("file-read", { pathName });
+        break;
+      default:
+        return next(
+          new BadRequest().handleResponse(res, {
+            info: "None of job matches our servings",
+          })
+        );
     }
 
     new CreateResponseStrategy().handleResponse(res, {

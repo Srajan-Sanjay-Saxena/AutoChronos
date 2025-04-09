@@ -1,8 +1,7 @@
 import express from "express";
 import queueController from "../controllers/redis/Queues/queue.controller.js";
-const router = express.Router();
-router.post("/createFile", queueController.addWriteOpsQueue);
-router.post("/deleteFile", queueController.addWriteOpsQueue);
-router.post("/createFolder", queueController.addWriteOpsQueue);
-router.post("/deleteFolder", queueController.addWriteOpsQueue);
-export default router;
+export const writeQueScheduler = express.Router();
+writeQueScheduler.post("/createFile", queueController.addWriteOpsQueue);
+writeQueScheduler.post("/deleteFile", queueController.addWriteOpsQueue);
+writeQueScheduler.post("/createFolder", queueController.addWriteOpsQueue);
+writeQueScheduler.post("/deleteFolder", queueController.addWriteOpsQueue);

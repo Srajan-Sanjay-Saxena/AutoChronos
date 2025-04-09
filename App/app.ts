@@ -1,28 +1,28 @@
-import express from 'express'
-import cookieParser from 'cookie-parser'
-import { type Application } from 'express'
-import helmet from 'helmet'
-import morgan from 'morgan'
-import { globalErrorHandlingMiddleware } from '../controllers/error.controller.js'
-import { env } from '../newProcess.js'
-import output_false_router from '../Routes/output_false.js'
-import output_true_router from '../Routes/output_true.js'
+import express from "express";
+import cookieParser from "cookie-parser";
+import { type Application } from "express";
+import helmet from "helmet";
+import morgan from "morgan";
+import { globalErrorHandlingMiddleware } from "../controllers/error.controller.js";
+import { env } from "../newProcess.js";
+import { readQueScheduler } from "../Routes/readQueScheduler.routes.js";
+import { writeQueScheduler } from "../Routes/writeQueScheduler.routes.js";
 
-const app : Application = express();
+const app: Application = express();
 app.use(helmet());
-if(env.NODE_ENV === 'development'){
-    app.use(morgan('dev'))
+if (env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
 }
-app.use(cookieParser())
-app.use(express.json())
-app.use(express.urlencoded({ extended : true }))
-app.use(output_false_router);
-app.use('/api/v1/swarm/read-ops',output_true_router);
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/api/v1/swarm/write-ops/", writeQueScheduler);
+app.use("/api/v1/swarm/read-ops/", readQueScheduler);
 
-app.get('/', (req, res)=>{
-    res.send('Site working');
-})
+app.get("/", (req, res) => {
+  res.send("Site working");
+});
 
-app.use(globalErrorHandlingMiddleware)
+app.use(globalErrorHandlingMiddleware);
 
-export { app }
+export { app };
