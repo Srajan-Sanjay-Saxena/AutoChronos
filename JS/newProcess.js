@@ -6,7 +6,8 @@ export const env = createEnv({
     server: {
         PORT: z.string(),
         NODE_ENV: z.enum(['development', 'production']),
-        SHELL: z.string()
+        SHELL: z.string(),
+        FRONTEND_URL: z.string()
     },
     clientPrefix: "",
     client: {},
