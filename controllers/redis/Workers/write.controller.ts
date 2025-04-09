@@ -19,13 +19,13 @@ import { getHostName } from "../../../Utils/hostName.js";
 import { Command } from "../../../Models/logs.model.js";
 import { fileURLToPath } from "url";
 
-const runCommand = (
+const runCommand =(
   command: ShellCommands,
   filePath: string
 ): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    // const hostName= getHostName();
-    const hostName = 'somehost';
+  return new Promise(async (resolve, reject) => {
+    const hostName = await getHostName();
+    // const hostName = 'somehost';
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
 
@@ -45,7 +45,7 @@ const runCommand = (
     console.log('Adding to the database.');
     const shellCommand =
       process.platform === "win32"
-        ? `cmd /c ${scriptPath}` // Use cmd to run .sh or .bat
+        ? `cmd /c ${scriptPath}`
         : `sh ${scriptPath}`;
 
     exec(shellCommand, async (error, stdout, stderr) => {
@@ -60,7 +60,7 @@ const runCommand = (
       console.log('Shell script executed successfully.');
       try {
         await Command.create({
-          machineId: hostname,
+          machineId: hostName,
           command: script,
         });
         console.log("Data saved");

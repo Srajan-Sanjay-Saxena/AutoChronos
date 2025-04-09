@@ -1,1 +1,1 @@
-mkdir "C:/Users/siddh/OneDrive/Desktop/SomeD"
+rm -rf "C:/Users/siddh/OneDrive/Desktop/SomeD"
