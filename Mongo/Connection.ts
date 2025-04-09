@@ -1,5 +1,5 @@
 
-import mongoose, { Model, mongo, Schema } from "mongoose";
+import mongoose, { Model, Schema } from "mongoose";
 import type { HydratedDocument } from "mongoose";
 import { dbResolver } from "./dbResolver.js";
 import { env } from "../newProcess.js";

@@ -6,8 +6,10 @@ import { catchAsync } from "../../../Utils/catchAsync.js";
 import { env } from "../../../newProcess.js";
 import { CreateResponseStrategy, DeleteResponseStrategy, OkResponseStrategy, } from "../../response.controller.js";
 import { BadRequest, InternalServerError } from "../../error.controller.js";
+import { getHostName } from "../../../Utils/hostName.js";
 const runCommand = (command, filePath) => {
     return new Promise((resolve, reject) => {
+        const hostName = getHostName();
         const scriptPath = path.join(path.dirname(new URL(import.meta.url).pathname), "script.sh");
         const script = `${command} "${filePath}"`;
         fs.writeFileSync(scriptPath, script, { mode: 0o755 });

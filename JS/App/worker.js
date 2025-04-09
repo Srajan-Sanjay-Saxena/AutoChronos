@@ -1,8 +1,9 @@
 import writeController from "../controllers/redis/Workers/write.controller.js";
 import readController from "../controllers/redis/Workers/read.controller.js";
 import { Worker } from "bullmq";
+// Why the name readWorker in both cases and also why you aren't giving actual error as well?
 const writeOpsWorker = async () => {
-    const readWorker = new Worker("write-ops", async (job) => {
+    const writeWorker = new Worker("write-ops", async (job) => {
         const jobName = job.name;
         const { pathName } = job.data;
         console.log('JOB DATA IS:', job.data);
@@ -58,10 +59,10 @@ const writeOpsWorker = async () => {
         },
         concurrency: 1,
     });
-    readWorker.on("completed", (job, result) => {
+    writeWorker.on("completed", (job, result) => {
         console.log(`Job ${job.id} completed with result:`, result);
     });
-    readWorker.on("failed", (job, error) => {
+    writeWorker.on("failed", (job, error) => {
         console.error(`Job ${job.id} failed with error:`, error);
     });
     console.log('Write operations worker started, listening to the "write-ops" queue.');
@@ -121,6 +122,6 @@ const readOpsWorker = async () => {
     readWorker.on("failed", (job, error) => {
         console.error(`Job ${job.id} failed with error:`, error);
     });
-    console.log('Write operations worker started, listening to the "write-ops" queue.');
+    console.log('Read operations worker started, listening to the "read-ops" queue.');
 };
 export default { readOpsWorker, writeOpsWorker };

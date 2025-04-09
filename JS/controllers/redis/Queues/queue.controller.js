@@ -52,7 +52,7 @@ const addWriteOpsQueue = catchAsync(async (req, res, next) => {
     ];
     const userTaskName = req.body.taskName;
     const pathName = req.body.targetName;
-    console.log("BODY IS:", req.body);
+    // console.log("BODY IS:",req.body)
     if (!pathName)
         return next(new BadRequest().handleResponse(res, { info: "Target name not given" }));
     if (!taskName.includes(userTaskName))
