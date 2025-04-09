@@ -2,19 +2,19 @@ import fs from "fs";
 import { exec } from "child_process";
 import path from "path";
 import os from "os";
-import { catchAsync } from "../Utils/catchAsync.js";
+import { catchAsync } from "../../../Utils/catchAsync.js";
 import type { Response, NextFunction } from "express";
-import { env } from "../newProcess.js";
-import type { ModifiedRequest } from "../Types/extras.types.js";
+import { env } from "../../../newProcess.js";
+import type { ModifiedRequest, ShellCommands } from "../../../Types/extras.types.js";
 import {
   CreateResponseStrategy,
   DeleteResponseStrategy,
   OkResponseStrategy,
-} from "./response.controller.js";
-import { BadRequest, InternalServerError } from "./error.controller.js";
+} from "../../response.controller.js";
+import { BadRequest, InternalServerError } from "../../error.controller.js";
 
 const runCommand = (
-  command: "touch" | "mkdir" | "rm" | "rm -rf",
+  command:ShellCommands,
   filePath: string
 ): Promise<void> => {
   return new Promise((resolve, reject) => {

@@ -1,11 +1,10 @@
-import express from 'express';
-import { deleteFolder, createFile, createFolder, deleteFile } from '../controllers/output_false.js';
+import express from "express";
+import queueController from "../controllers/redis/Queues/queue.controller.js";
 
 const router = express.Router();
 
-router.post('/createFile', createFile);
-router.post('/deleteFile', deleteFile);
-router.post('/createFolder', createFolder);
-router.post('/deleteFolder', deleteFolder);
-
+router.post("/createFile", queueController.addWriteOpsQueue);
+router.post("/deleteFile", queueController.addWriteOpsQueue);
+router.post("/createFolder", queueController.addWriteOpsQueue);
+router.post("/deleteFolder", queueController.addWriteOpsQueue);
 export default router;

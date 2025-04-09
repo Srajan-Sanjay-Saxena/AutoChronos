@@ -1,7 +1,7 @@
-import express from 'express';
-import { lsDir, history, fileRead } from '../controllers/output_true.js';
+import express from "express";
+import queueController from "../controllers/redis/Queues/queue.controller.js";
 const router = express.Router();
-router.get('/lsDir', lsDir);
-router.get('/history', history);
-router.get("/fileRead", fileRead);
+router.get("/lsDir", queueController.addReadOpsQueue);
+router.get("/history", queueController.addReadOpsQueue);
+router.get("/fileRead", queueController.addReadOpsQueue);
 export default router;

@@ -1,12 +1,12 @@
-import express, { urlencoded } from 'express';
+import express from 'express';
+import cookieParser from 'cookie-parser';
 import {} from 'express';
 import helmet from 'helmet';
-import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
+import { globalErrorHandlingMiddleware } from '../controllers/error.controller.js';
 import { env } from '../newProcess.js';
 import output_false_router from '../Routes/output_false.js';
 import output_true_router from '../Routes/output_true.js';
-import { globalErrorHandlingMiddleware } from '../controllers/error.controller.js';
 const app = express();
 app.use(helmet());
 if (env.NODE_ENV === 'development') {

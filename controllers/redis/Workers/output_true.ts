@@ -1,11 +1,12 @@
 import { exec } from "child_process";
 import path from "path";
 import fs from "fs";
-import { catchAsync } from "../Utils/catchAsync.js";
 import type { Response, NextFunction } from "express";
-import type { ModifiedRequest } from "../Types/extras.types.js";
-import { OkResponseStrategy } from "./response.controller.js";
-import { InternalServerError } from "./error.controller.js";
+import type { ModifiedRequest } from "../../../Types/extras.types.js";
+import { InternalServerError } from "../../error.controller.js";
+import { OkResponseStrategy } from "../../response.controller.js";
+import { catchAsync } from "../../../Utils/catchAsync.js";
+
 
 
 export const lsDir = catchAsync(
