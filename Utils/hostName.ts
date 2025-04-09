@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 
 export const getHostName = () => {
-    exec("sh hostname", (error,stdout,stderr)=>{
+    return exec("sh hostname", (error,stdout,stderr)=>{
       if(error){
         console.error(`Error executing hostname: ${error?.message}`);
         throw new Error("Sorry cannot perform operation");
@@ -11,6 +11,5 @@ export const getHostName = () => {
         console.error(`stderr: ${stderr}`);
         throw new Error("Sorry cannot perform operation");
       }
-      return stdout;
-    });
+    }).stdout
   }

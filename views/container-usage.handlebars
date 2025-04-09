@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Container Usage Alert</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        padding: 20px;
+      }
+      .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      h2 {
+        color: #007BFF;
+      }
+      .info {
+        margin: 10px 0;
+      }
+      .label {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>🚨 Container Usage Alert</h2>
+      <p>Hello,</p>
+      <p>Here's the latest usage report for your container:</p>
+
+      <div class="info"><span class="label">📦 Container ID:</span> {{containerId}}</div>
+      <div class="info"><span class="label">📁 Path:</span> {{pathName}}</div>
+      <div class="info"><span class="label">💾 Total Space:</span> {{totalSpace}}</div>
+      <div class="info"><span class="label">📊 Used Space:</span> {{usedSpace}}</div>
+      <div class="info"><span class="label">🟢 Free Space:</span> {{freeSpace}}</div>
+
+      <p>Please take appropriate actions if the usage is nearing critical levels.</p>
+
+      <p>Regards,<br/>Your Monitoring Team</p>
+    </div>
+  </body>
+</html>

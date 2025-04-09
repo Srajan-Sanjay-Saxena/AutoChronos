@@ -47,7 +47,7 @@ export class DiskSpaceNotification extends Email {
         this.usedSpace = usedSpace;
         this.totalSpace = totalSpace;
     }
-    sendEmail(subject, template, next) {
+    sendEmail(subject, template) {
         const transporter = Email.transporter();
         transporter.use("compile", hbs(Email.handleBarsOption));
         const mailOptions = {
@@ -55,11 +55,17 @@ export class DiskSpaceNotification extends Email {
             from: this.from,
             subject: subject,
             template: template,
+            context: {
+                containerId: this.containerId,
+                freeSpace: this.freeSpace,
+                pathName: this.pathName,
+                usedSpace: this.usedSpace,
+                totalSpace: this.totalSpace
+            }
         };
         transporter.sendMail(mailOptions, (err, res) => {
             if (err) {
-                next(new Error("Internal server , verification email can't be send"));
-                console.log("Error occurred:", err);
+                throw new Error("Internal server , verification email can't be send");
             }
         });
     }
