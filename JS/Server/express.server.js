@@ -1,5 +1,6 @@
 import { app } from "../App/app.js";
 import { env } from "../newProcess.js";
+import { mongoInstance } from "../Mongo/Connection.js";
 process.on('uncaughtException', (err) => {
     console.log('Uncaught exception', err.name);
     console.log('shutting down server');
