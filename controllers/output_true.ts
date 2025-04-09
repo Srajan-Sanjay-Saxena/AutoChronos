@@ -16,45 +16,39 @@ export const lsDir = catchAsync(
       return res.status(400).json({ message: "Invalid or missing path." });
     }
 
-    const scriptPath = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "script.sh"
-    );
+    const safePath = absPath.replace(/["'`]/g, ""); // Sanitize input
+    const isWindows = process.platform === "win32";
 
-    const safePath = absPath.replace(/["'`]/g, ""); // Remove quotes to prevent injection
-    const script = `ls "${safePath}"`;
-    fs.writeFileSync(scriptPath, script, { mode: 0o755 });
+    const command = isWindows
+      ? `dir "${safePath}"` // Windows equivalent of `ls`
+      : `ls "${safePath}"`;
 
-    exec(`sh "${scriptPath}"`, (error, stdout, stderr) => {
+    exec(command, (error, stdout, stderr) => {
       if (error) {
-        console.error(`Error executing ls: ${error.message}`);
         return next(
           new InternalServerError().handleResponse(res, {
-            message: "Error executing ls",
+            message: "Error listing directory",
             error: error.message,
           })
         );
       }
-      if (stderr) {
-        console.error(`stderr: ${stderr}`);
-      }
+      if (stderr) console.error(`stderr: ${stderr}`);
       new OkResponseStrategy().handleResponse(res, { info: stdout });
     });
   }
 );
 
+
 export const history = catchAsync(
   async (_req: ModifiedRequest, res: Response, next: NextFunction) => {
-    const scriptPath = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "script.sh"
-    );
-    const script = `cat ~/.bash_history`;
-    fs.writeFileSync(scriptPath, script, { mode: 0o755 });
+    const isWindows = process.platform === "win32";
 
-    exec(`sh "${scriptPath}"`, (error, stdout, stderr) => {
+    const command = isWindows
+      ? `doskey /history` // Basic Windows equivalent
+      : `cat ~/.bash_history`;
+
+    exec(command, (error, stdout, stderr) => {
       if (error) {
-        console.error(`Error reading command history: ${error.message}`);
         return next(
           new InternalServerError().handleResponse(res, {
             message: "Error reading command history",
@@ -62,40 +56,39 @@ export const history = catchAsync(
           })
         );
       }
-      if (stderr) {
-        console.error(`stderr: ${stderr}`);
-      }
+      if (stderr) console.error(`stderr: ${stderr}`);
       new OkResponseStrategy().handleResponse(res, { info: stdout });
     });
   }
 );
 
+
 export const fileRead = catchAsync(
   async (req: ModifiedRequest, res: Response, next: NextFunction) => {
-    const absPath=req.body.path;
-    const scriptPath = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "script.sh"
-    );
-    console.log(path)
-    const script=`less ${absPath}`;
-    fs.writeFileSync(scriptPath,script,{mode:0o755});
+    const absPath = req.body.path;
 
-    exec(`sh "${scriptPath}"`,(error,stdout,stderr)=>{
-      if(error){
-        console.error(`Error executing echo: ${error.message}`);
+    if (!absPath || typeof absPath !== "string") {
+      return res.status(400).json({ message: "Invalid or missing file path." });
+    }
+
+    const safePath = absPath.replace(/["'`]/g, "");
+    const isWindows = process.platform === "win32";
+
+    const command = isWindows
+      ? `type "${safePath}"` // Windows equivalent of `less` or `cat`
+      : `cat "${safePath}"`;
+
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
         return next(
           new InternalServerError().handleResponse(res, {
-            message: "Error executing echo",
+            message: "Error reading file",
             error: error.message,
           })
         );
       }
-
-      if(stderr){
-        console.error(`stderr: ${stderr}`);
-      }
+      if (stderr) console.error(`stderr: ${stderr}`);
       new OkResponseStrategy().handleResponse(res, { info: stdout });
     });
   }
-)
+);
