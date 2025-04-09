@@ -1,7 +1,7 @@
 import fs from "fs";
 import { exec } from "child_process";
 import path from "path";
-import os from "os";
+import os, { hostname } from "os";
 import { catchAsync } from "../../../Utils/catchAsync.js";
 import type { Response, NextFunction } from "express";
 import { env } from "../../../newProcess.js";
@@ -16,33 +16,59 @@ import {
 } from "../../response.controller.js";
 import { BadRequest, InternalServerError } from "../../error.controller.js";
 import { getHostName } from "../../../Utils/hostName.js";
+import { Command } from "../../../Models/logs.model.js";
+import { fileURLToPath } from "url";
 
 const runCommand =(
   command: ShellCommands,
   filePath: string
 ): Promise<void> => {
   return new Promise(async (resolve, reject) => {
-    const hostName= await getHostName();
-    console.log(hostName)
-    const scriptPath = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "script.sh"
-    );
+    const hostName = await getHostName();
+    // const hostName = 'somehost';
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
+    const scriptPath = path.join(__dirname, "script.sh");
+
     const script = `${command} "${filePath}"`;
+    console.log("Script1 is: ",script);
+    try {
+      fs.writeFileSync(scriptPath, script, { mode: 0o755 });
+      console.log("Script2 is: ", script);
+    } catch (err) {
+      console.error("Error writing script file:", err);
+    }
+    
+    console.log("Script2 is: ",script);
 
-    fs.writeFileSync(scriptPath, script, { mode: 0o755 });
+    console.log('Adding to the database.');
+    const shellCommand =
+      process.platform === "win32"
+        ? `cmd /c ${scriptPath}`
+        : `sh ${scriptPath}`;
 
-    exec(`sh ${scriptPath}`, (error, stdout, stderr) => {
+    exec(shellCommand, async (error, stdout, stderr) => {
       if (error) {
-        // console.error(`Error executing script: ${error.message}`);
+        console.error(`Error executing script: ${error.message}`);
         return reject(new Error(error.message));
       }
       if (stderr) {
-        // console.error(`stderr: ${stderr}`);
+        console.error(`stderr: ${stderr}`);
         return reject(new Error(stderr));
       }
-      // console.log('Shell script executed successfully.');
-      resolve();
+      console.log('Shell script executed successfully.');
+      try {
+        await Command.create({
+          machineId: hostName,
+          command: script,
+        });
+        console.log("Data saved");
+        resolve();
+      } catch (err) {
+        console.error("Error saving to database:", err);
+        reject(err);
+      }
     });
   });
 };

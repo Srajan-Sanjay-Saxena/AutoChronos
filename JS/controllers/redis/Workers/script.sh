@@ -1,1 +1,1 @@
-mkdir "/home/kaneki003/himom"
+rm -rf "C:/Users/siddh/OneDrive/Desktop/SomeD"
