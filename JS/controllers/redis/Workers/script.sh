@@ -1,1 +1,1 @@
-ls "/home/kaneki003"
+mkdir "/home/kaneki003/himom"
