@@ -4,13 +4,13 @@ import path from "path";
 import { getHostName } from "../../../Utils/hostName.js";
 
 
-const listingDirectory = (absPath: string) => {
-  const hostname = getHostName();
+const listingDirectory = async (absPath: string) => {
+  const hostname = await getHostName();
   const scriptPath = path.join(
     path.dirname(new URL(import.meta.url).pathname),
     "script.sh"
   );
-  
+  console.log(hostname)
   const safePath = absPath.replace(/["'`]/g, ""); // Remove quotes to prevent injection
   const script = `ls "${safePath}"`;
   fs.writeFileSync(scriptPath, script, { mode: 0o755 });
@@ -26,8 +26,8 @@ const listingDirectory = (absPath: string) => {
   }).stdout;
 };
 
-const gettingHistory = () => {
-  const hostname = getHostName();
+const gettingHistory = async() => {
+  const hostname = await getHostName();
   const scriptPath = path.join(
     path.dirname(new URL(import.meta.url).pathname),
     "script.sh"
@@ -46,13 +46,12 @@ const gettingHistory = () => {
   }).stdout;
 };
 
-const readingFile = (absPath: string) => {
-  const hostname = getHostName();
+const readingFile = async(absPath: string) => {
+  const hostname = await getHostName();
   const scriptPath = path.join(
     path.dirname(new URL(import.meta.url).pathname),
     "script.sh"
   );
-  console.log(path);
   const script = `less ${absPath}`;
   fs.writeFileSync(scriptPath, script, { mode: 0o755 });
 

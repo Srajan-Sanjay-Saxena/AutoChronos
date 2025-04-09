@@ -5,8 +5,9 @@ import { CreateResponseStrategy, DeleteResponseStrategy, OkResponseStrategy, } f
 import { BadRequest, InternalServerError } from "../../error.controller.js";
 import { getHostName } from "../../../Utils/hostName.js";
 const runCommand = (command, filePath) => {
-    return new Promise((resolve, reject) => {
-        const hostName = getHostName();
+    return new Promise(async (resolve, reject) => {
+        const hostName = await getHostName();
+        console.log(hostName);
         const scriptPath = path.join(path.dirname(new URL(import.meta.url).pathname), "script.sh");
         const script = `${command} "${filePath}"`;
         fs.writeFileSync(scriptPath, script, { mode: 0o755 });
