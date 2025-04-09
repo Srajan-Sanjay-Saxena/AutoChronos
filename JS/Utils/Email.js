@@ -15,8 +15,8 @@ class Email {
         extName: ".handlebars",
         viewPath: path.resolve("./views"),
     };
-    constructor(user) {
-        this.to = user.email;
+    constructor(emailTo) {
+        this.to = emailTo;
         this.from = env.EMAIL_FROM;
     }
     static transporter() {
@@ -33,13 +33,21 @@ class Email {
         });
     }
 }
-export class TwoFAEmailVerification extends Email {
-    token;
-    constructor(user, token) {
-        super(user);
-        this.token = token;
+export class DiskSpaceNotification extends Email {
+    containerId;
+    totalSpace;
+    usedSpace;
+    freeSpace;
+    pathName;
+    constructor(emailTo, containerId, totalSpace, usedSpace, freeSpace, pathName) {
+        super(emailTo);
+        this.containerId = containerId;
+        this.freeSpace = freeSpace;
+        this.pathName = pathName;
+        this.usedSpace = usedSpace;
+        this.totalSpace = totalSpace;
     }
-    sendEmail(subject, template, next) {
+    sendEmail(subject, template) {
         const transporter = Email.transporter();
         transporter.use("compile", hbs(Email.handleBarsOption));
         const mailOptions = {
@@ -47,11 +55,17 @@ export class TwoFAEmailVerification extends Email {
             from: this.from,
             subject: subject,
             template: template,
+            context: {
+                containerId: this.containerId,
+                freeSpace: this.freeSpace,
+                pathName: this.pathName,
+                usedSpace: this.usedSpace,
+                totalSpace: this.totalSpace
+            }
         };
         transporter.sendMail(mailOptions, (err, res) => {
             if (err) {
-                next(new Error("Internal server , verification email can't be send"));
-                console.log("Error occurred:", err);
+                throw new Error("Internal server , verification email can't be send");
             }
         });
     }

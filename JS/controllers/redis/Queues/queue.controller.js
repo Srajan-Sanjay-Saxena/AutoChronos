@@ -20,28 +20,6 @@ const readOpsQueue = new Queue("read-ops", {
         port: 6379,
     },
 });
-//* Cron time operations
-const addEmailQueue = catchAsync(async (req, res, next) => {
-    const { emailTo, subject, cronTime } = req.body;
-    if (!emailTo) {
-        return next(new BadRequest().handleResponse(res, {
-            info: "Email recipient not given",
-        }));
-    }
-    else if (!cronTime) {
-        return next(new BadRequest().handleResponse(res, { info: "Cron time not given" }));
-    }
-    const finalSubject = subject || "Disk Usage";
-    const job = await emailQueue.add("email-service", {
-        emailTo,
-        finalSubject,
-        cronTime,
-    });
-    new CreateResponseStrategy().handleResponse(res, {
-        info: "Job added successfully to email queue",
-        id: job.id,
-    });
-});
 //* One time operations
 const addWriteOpsQueue = catchAsync(async (req, res, next) => {
     const taskName = [
@@ -52,13 +30,14 @@ const addWriteOpsQueue = catchAsync(async (req, res, next) => {
     ];
     const userTaskName = req.body.taskName;
     const pathName = req.body.targetName;
-    // console.log("BODY IS:",req.body)
+    console.log("BODY IS:", req.body);
     if (!pathName)
         return next(new BadRequest().handleResponse(res, { info: "Target name not given" }));
     if (!taskName.includes(userTaskName))
         return next(new BadRequest().handleResponse(res, {
             info: "Invalid crud operation given",
         }));
+    //TODO : Mongo model bana logs ka , 2->model , 1 -->write 2--> read
     const job = await writeOpsQueue.add(userTaskName, { pathName });
     new CreateResponseStrategy().handleResponse(res, {
         info: "Job added successfully to write-ops queue",
@@ -102,4 +81,4 @@ const addReadOpsQueue = catchAsync(async (req, res, next) => {
         id: job.id,
     });
 });
-export default { addEmailQueue, addReadOpsQueue, addWriteOpsQueue };
+export default { addReadOpsQueue, addWriteOpsQueue };
