@@ -10,7 +10,6 @@ import { writeQueScheduler } from "../Routes/writeQueScheduler.routes.js";
 import { logRouter } from "../Routes/getlog.routes.js";
 import { emailPubSubRouter } from "../Routes/email.pub-sub.routes.js";
 
-
 const app: Application = express();
 app.use(helmet());
 if (env.NODE_ENV === "development") {
