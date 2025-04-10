@@ -1,14 +1,30 @@
-ARG VERSION="alpine"
-FROM node:${VERSION}
-LABEL OWNER="srajan saxena <invinciblecoder071723@gmail.com>"
+# Use Ubuntu as the base image
+FROM ubuntu:22.04
 
-RUN npm install -g pnpm 
+LABEL maintainer="Srajan Saxena <invinciblecoder071723@gmail.com>"
+
+# Install curl, Node.js, and pnpm dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    ca-certificates \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g pnpm \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Copy dependency files first
 COPY package.json pnpm-lock.yaml* ./
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
+
+# Copy rest of the code
 COPY . .
-EXPOSE 6379
 
-CMD ["pnpm" , "start-production-redis"]
+# Expose your app's port (change this to your app's actual port)
+EXPOSE 3000
 
+# Start the app
+CMD ["pnpm", "start-production-redis"]
