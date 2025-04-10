@@ -4,12 +4,12 @@ import readController from "../controllers/redis/Workers/read.controller.js";
 
 // Why the name readWorker in both cases and also why you aren't giving actual error as well?
 const writeOpsWorker = async () => {
-  const writeWorker = new Worker(  
+  const writeWorker = new Worker(
     "write-ops",
     async (job) => {
       const jobName = job.name;
       const { pathName } = job.data;
-      console.log('JOB DATA IS:' , job.data)
+      console.log("JOB DATA IS:", job.data);
       if (!pathName)
         throw new Error("Cannot do write operations , path name not given");
       switch (jobName) {
@@ -59,7 +59,7 @@ const writeOpsWorker = async () => {
     },
     {
       connection: {
-        host: "localhost",
+        host: "host.docker.internal",
         port: 6379,
       },
       concurrency: 1,
@@ -83,7 +83,7 @@ const readOpsWorker = async () => {
     async (job) => {
       const jobName = job.name;
       const { pathName } = job.data;
-      console.log('JOB DATA IS:' , job.data)
+      console.log("JOB DATA IS:", job.data);
       switch (jobName) {
         case "listing-directory":
           try {
@@ -121,7 +121,7 @@ const readOpsWorker = async () => {
     },
     {
       connection: {
-        host: "localhost",
+        host: "host.docker.internal",
         port: 6379,
       },
       concurrency: 1,
@@ -140,4 +140,4 @@ const readOpsWorker = async () => {
   );
 };
 
-export default { readOpsWorker , writeOpsWorker }
+export default { readOpsWorker, writeOpsWorker };

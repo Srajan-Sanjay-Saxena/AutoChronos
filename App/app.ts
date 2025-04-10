@@ -10,6 +10,7 @@ import { writeQueScheduler } from "../Routes/writeQueScheduler.routes.js";
 import { logRouter } from "../Routes/getlog.routes.js";
 import { emailPubSubRouter } from "../Routes/email.pub-sub.routes.js";
 
+
 const app: Application = express();
 app.use(helmet());
 if (env.NODE_ENV === "development") {
@@ -21,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/swarm/write-ops/", writeQueScheduler);
 app.use("/api/v1/swarm/read-ops/", readQueScheduler);
 app.use("/api/v1/swarm/getLog/", logRouter);
-app.use("/api/v1/swarm/diskStorageEmail/", emailPubSubRouter);
+app.use("/app/v1/swarm/getDiskStorageEmail/", emailPubSubRouter);
 
 app.get("/", (req, res) => {
   res.send("Site working");
