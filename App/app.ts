@@ -20,8 +20,7 @@ if (env.NODE_ENV === "development") {
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cors(corsOptions))
-app.use(cors())
+app.use(cors(corsOptions))
 app.use("/api/v1/swarm/write-ops/", writeQueScheduler);
 app.use("/api/v1/swarm/read-ops/", readQueScheduler);
 app.use("/api/v1/swarm/getLog/", logRouter);
