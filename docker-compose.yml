@@ -29,3 +29,8 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == manager
+    ports:
+      - "6379:6379"
