@@ -9,14 +9,14 @@ import { CreateResponseStrategy } from "../../response.controller.js";
 
 const writeOpsQueue = new Queue("write-ops", {
   connection: {
-    host: "host.docker.internal",
+    host: "localhost",
     port: 6379,
   },
 });
 
 const readOpsQueue = new Queue("read-ops", {
   connection: {
-    host: "host.docker.internal",
+    host: "localhost",
     port: 6379,
   },
 });

@@ -59,7 +59,7 @@ const writeOpsWorker = async () => {
     },
     {
       connection: {
-        host: "host.docker.internal",
+        host: "localhost",
         port: 6379,
       },
       concurrency: 1,
@@ -121,7 +121,7 @@ const readOpsWorker = async () => {
     },
     {
       connection: {
-        host: "host.docker.internal",
+        host: "localhost",
         port: 6379,
       },
       concurrency: 1,
