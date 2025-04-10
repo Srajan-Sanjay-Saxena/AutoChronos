@@ -18,10 +18,11 @@ export const env = createEnv({
           message: "DB string must contain <username> and <password>",
         }
       ),
-    USERNAME: z.string().refine((value) => value.length >= 3 , {
+    USER_NAME: z.string().refine((value) => value.length >= 3 , {
         message : "Username must be at least 3 characters long"
     }),
     PASSWORD : z.string(),
+    // DB: z.string(),
 
     //* JWT Details---------------------------------------------
     JWT_SECRET_KEY : z.string(),
