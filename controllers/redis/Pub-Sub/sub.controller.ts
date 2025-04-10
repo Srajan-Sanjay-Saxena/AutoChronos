@@ -3,7 +3,7 @@ import { getDiskUsage } from "../../../Services/DiskUsage.js";
 import { DiskSpaceNotification } from "../../../Services/Email.js";
 import { getHostName } from "../../../Utils/hostName.js";
 import cron from "node-cron";
-async function startWorker() {
+export async function startEmailSubscriber() {
   redisSub.on("error", (err) => console.error("Redis Error:", err));
   await redisSub.subscribe("sendEmail-task", async (message) => {
     console.log("[Worker] Received broadcast task:", message);
@@ -12,7 +12,6 @@ async function startWorker() {
     try {
       const { emailTo, finalSubject, cronTime } = JSON.parse(message);
       const containerId = getHostName().toString();
-      const { totalSpace, freeSpace, usedSpace, path } = await getDiskUsage();
       // Perform actions based on `data.type`
       cron.schedule(cronTime, async () => {
         console.log(
@@ -40,4 +39,3 @@ async function startWorker() {
   });
 }
 
-startWorker();

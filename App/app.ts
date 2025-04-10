@@ -8,6 +8,7 @@ import { env } from "../newProcess.js";
 import { readQueScheduler } from "../Routes/readQueScheduler.routes.js";
 import { writeQueScheduler } from "../Routes/writeQueScheduler.routes.js";
 import { logRouter } from "../Routes/getlog.routes.js";
+import { emailPubSubRouter } from "../Routes/email.pub-sub.routes.js";
 
 
 const app: Application = express();
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/swarm/write-ops/", writeQueScheduler);
 app.use("/api/v1/swarm/read-ops/", readQueScheduler);
 app.use("/api/v1/swarm/getLog/", logRouter);
+app.use("/api/v1/swarm/diskStorageEmail/", emailPubSubRouter);
 
 app.get("/", (req, res) => {
   res.send("Site working");
