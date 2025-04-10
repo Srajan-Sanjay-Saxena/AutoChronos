@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import validator from "validator";
 import { mongoInstance } from "../Mongo/Connection.js";
-import type { UserNamespace } from "../Types/user.types.js";
+import type { UserNamespace } from "../Types/model.types.js";
 
 export const userSchema = new mongoose.Schema({
   email: {

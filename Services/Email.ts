@@ -5,7 +5,7 @@ import hbs from "nodemailer-express-handlebars";
 import nodemailer from "nodemailer";
 import path from "path";
 import { env } from "../newProcess.js";
-import type { UserNamespace } from "../Types/user.types.js";
+import type { UserNamespace } from "../Types/model.types.js";
 
 interface EmailService {
   sendEmail: (template: string, subject: string, next: NextFunction) => void;
@@ -72,10 +72,7 @@ export class DiskSpaceNotification extends Email {
     this.usedSpace = usedSpace;
     this.totalSpace = totalSpace;
   }
-  override sendEmail(
-    subject: string,
-    template: string,
-  ): void {
+  override sendEmail(subject: string, template: string): void {
     const transporter = Email.transporter();
     transporter.use("compile", hbs(Email.handleBarsOption));
     const mailOptions = {
@@ -83,13 +80,13 @@ export class DiskSpaceNotification extends Email {
       from: this.from,
       subject: subject,
       template: template,
-      context : {
-        containerId : this.containerId,
-        freeSpace : this.freeSpace,
-        pathName : this.pathName,
-        usedSpace : this.usedSpace,
-        totalSpace : this.totalSpace
-      }
+      context: {
+        containerId: this.containerId,
+        freeSpace: this.freeSpace,
+        pathName: this.pathName,
+        usedSpace: this.usedSpace,
+        totalSpace: this.totalSpace,
+      },
     };
     transporter.sendMail(mailOptions, (err, res) => {
       if (err) {

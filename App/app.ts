@@ -7,7 +7,7 @@ import { globalErrorHandlingMiddleware } from "../controllers/error.controller.j
 import { env } from "../newProcess.js";
 import { readQueScheduler } from "../Routes/readQueScheduler.routes.js";
 import { writeQueScheduler } from "../Routes/writeQueScheduler.routes.js";
-import logRouter from "../Routes/getlog.routes.js";
+import { logRouter } from "../Routes/getLog.routes.js";
 
 const app: Application = express();
 app.use(helmet());
