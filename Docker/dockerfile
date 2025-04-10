@@ -1,5 +1,0 @@
-ARG VERSION="latest"
-FROM node:${VERSION}
-LABEL OWNER="srajan saxena <>"
-
-COPY ./JS .
