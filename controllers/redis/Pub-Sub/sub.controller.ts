@@ -1,6 +1,6 @@
 import { redisSub } from "../../../App/worker.pub-sub.js";
 import { getDiskUsage } from "../../../Services/DiskUsage.js";
-import { DiskSpaceNotification } from "../../../Utils/Email.js";
+import { DiskSpaceNotification } from "../../../Services/Email.js";
 import { getHostName } from "../../../Utils/hostName.js";
 import cron from "node-cron";
 async function startWorker() {

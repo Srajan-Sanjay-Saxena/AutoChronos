@@ -2,9 +2,9 @@ import type { Request, Response, NextFunction } from "express";
 import { catchAsync } from "../../../Utils/catchAsync.js";
 import { Command } from "../../../Models/logs.model.js";
 
-export const getlog = catchAsync(
+export const getLog = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        
+
         try {
             const lastTenTasks = await Command.find()
             .sort({ createdAt: -1 })

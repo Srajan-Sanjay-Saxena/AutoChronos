@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/swarm/write-ops/", writeQueScheduler);
 app.use("/api/v1/swarm/read-ops/", readQueScheduler);
-app.use("/api/v1/swarm/getlog/", logRouter);
+app.use("/api/v1/swarm/getLog/", logRouter);
 
 app.get("/", (req, res) => {
   res.send("Site working");
