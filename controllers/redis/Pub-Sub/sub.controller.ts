@@ -5,21 +5,20 @@ import { getHostName } from "../../../Utils/hostName.js";
 import cron from "node-cron";
 export async function startEmailSubscriber() {
   redisSub.on("error", (err) => console.error("Redis Error:", err));
+
   await redisSub.subscribe("sendEmail-task", async (message) => {
     console.log("[Worker] Received broadcast task:", message);
-
     // Optional: parse and run some action
     try {
       const { emailTo, finalSubject, cronTime } = JSON.parse(message);
-      const containerId = getHostName().toString();
+      const containerId = await getHostName().toString();
+      console.log(emailTo, finalSubject, cronTime);
       // Perform actions based on `data.type`
       cron.schedule(cronTime, async () => {
         console.log(
           `[Worker] Running scheduled task for ${emailTo} at ${new Date().toISOString()}`
         );
-
         const { totalSpace, freeSpace, usedSpace, path } = await getDiskUsage();
-
         new DiskSpaceNotification(
           emailTo,
           containerId,
@@ -38,4 +37,3 @@ export async function startEmailSubscriber() {
     }
   });
 }
-
