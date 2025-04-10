@@ -4,6 +4,7 @@ import { Command } from "../../../Models/logs.model.js";
 
 export const getlog = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        
         try {
             const lastTenTasks = await Command.find()
             .sort({ createdAt: -1 })

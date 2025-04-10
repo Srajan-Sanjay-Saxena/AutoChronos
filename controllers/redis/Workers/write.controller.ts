@@ -39,10 +39,7 @@ const runCommand =(
     } catch (err) {
       console.error("Error writing script file:", err);
     }
-    
-    console.log("Script2 is: ",script);
-
-    console.log('Adding to the database.');
+ 
     const shellCommand =
       process.platform === "win32"
         ? `cmd /c ${scriptPath}`
@@ -76,7 +73,7 @@ const runCommand =(
 const createFile = async (fileName: string) =>
   await runCommand("touch", fileName);
 const deleteFile = async (fileName: string) =>
-  await await runCommand("rm", fileName);
+  await runCommand("rm", fileName);
 const createFolder = async (foldername: string) =>
   await runCommand("mkdir", foldername);
 const deleteFolder = async (foldername: string) =>
