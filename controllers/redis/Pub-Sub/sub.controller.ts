@@ -1,7 +1,7 @@
 import { redisSub } from "../../../App/worker.pub-sub.js";
-import { DiskSpaceNotification } from "../../../Utils/Email.js";
+import { getDiskUsage } from "../../../Services/DiskUsage.js";
+import { DiskSpaceNotification } from "../../../Services/Email.js";
 import { getHostName } from "../../../Utils/hostName.js";
-import { getDiskUsage } from "./diskUsage.js";
 import cron from "node-cron";
 async function startWorker() {
   redisSub.on("error", (err) => console.error("Redis Error:", err));

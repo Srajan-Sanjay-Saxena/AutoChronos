@@ -1,8 +1,6 @@
-import express from 'express';
-import { getlog } from '../controllers/redis/GUI/getlog.controller.js';
+import express from "express";
+import { getLog } from "../controllers/redis/GUI/getLog.controller.js";
 
-const logRouter = express.Router();
+export const logRouter = express.Router();
+logRouter.get("/", getLog);
 
-logRouter.get('/', getlog);
-
-export default logRouter;

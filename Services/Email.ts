@@ -5,7 +5,7 @@ import hbs from "nodemailer-express-handlebars";
 import nodemailer from "nodemailer";
 import path from "path";
 import { env } from "../newProcess.js";
-import type { UserNamespace } from "../Types/user.types.js";
+import type { UserNamespace } from "../Types/model.types.js";
 
 interface EmailService {
   sendEmail: (template: string, subject: string, next: NextFunction) => void;
@@ -25,8 +25,8 @@ abstract class Email implements EmailService {
     viewPath: path.resolve("./views"),
   };
 
-  protected constructor(user: UserNamespace.UserDoc) {
-    this.to = user.email as EmailBrand;
+  protected constructor(emailTo: string) {
+    this.to = emailTo as EmailBrand;
     this.from = env.EMAIL_FROM as EmailBrand;
   }
 
@@ -51,17 +51,28 @@ abstract class Email implements EmailService {
   ): void;
 }
 
-export class TwoFAEmailVerification extends Email {
-  public token: number;
-  constructor(user: UserNamespace.UserDoc, token: number) {
-    super(user);
-    this.token = token;
+export class DiskSpaceNotification extends Email {
+  public containerId: string;
+  public totalSpace: string;
+  public usedSpace: string;
+  public freeSpace: string;
+  public pathName: string;
+  constructor(
+    emailTo: string,
+    containerId: string,
+    totalSpace: string,
+    usedSpace: string,
+    freeSpace: string,
+    pathName: string
+  ) {
+    super(emailTo);
+    this.containerId = containerId;
+    this.freeSpace = freeSpace;
+    this.pathName = pathName;
+    this.usedSpace = usedSpace;
+    this.totalSpace = totalSpace;
   }
-  override sendEmail(
-    subject: string,
-    template: string,
-    next: NextFunction
-  ): void {
+  override sendEmail(subject: string, template: string): void {
     const transporter = Email.transporter();
     transporter.use("compile", hbs(Email.handleBarsOption));
     const mailOptions = {
@@ -69,11 +80,17 @@ export class TwoFAEmailVerification extends Email {
       from: this.from,
       subject: subject,
       template: template,
+      context: {
+        containerId: this.containerId,
+        freeSpace: this.freeSpace,
+        pathName: this.pathName,
+        usedSpace: this.usedSpace,
+        totalSpace: this.totalSpace,
+      },
     };
     transporter.sendMail(mailOptions, (err, res) => {
       if (err) {
-        next(new Error("Internal server , verification email can't be send"));
-        console.log("Error occurred:", err);
+        throw new Error("Internal server , verification email can't be send");
       }
     });
   }
