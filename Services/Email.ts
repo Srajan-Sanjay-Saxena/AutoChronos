@@ -89,8 +89,9 @@ export class DiskSpaceNotification extends Email {
       },
     };
     transporter.sendMail(mailOptions, (err, res) => {
+      console.log("Email sent: ", res);
       if (err) {
-        throw new Error("Internal server , verification email can't be send");
+        throw new Error("Internal server , verification email can't be send" ,err);
       }
     });
   }

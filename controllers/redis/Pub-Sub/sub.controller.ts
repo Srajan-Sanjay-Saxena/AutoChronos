@@ -11,16 +11,14 @@ export async function startEmailSubscriber() {
     // Optional: parse and run some action
     try {
       const { emailTo, finalSubject, cronTime } = JSON.parse(message);
-      const containerId = getHostName().toString();
+      const containerId = await getHostName().toString();
       console.log(emailTo, finalSubject, cronTime);
       // Perform actions based on `data.type`
       cron.schedule(cronTime, async () => {
         console.log(
           `[Worker] Running scheduled task for ${emailTo} at ${new Date().toISOString()}`
         );
-
         const { totalSpace, freeSpace, usedSpace, path } = await getDiskUsage();
-
         new DiskSpaceNotification(
           emailTo,
           containerId,
@@ -39,4 +37,3 @@ export async function startEmailSubscriber() {
     }
   });
 }
-
