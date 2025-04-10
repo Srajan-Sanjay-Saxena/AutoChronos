@@ -1,0 +1,14 @@
+ARG VERSION="alpine"
+FROM node:${VERSION}
+LABEL OWNER="srajan saxena <invinciblecoder071723@gmail.com>"
+
+RUN npm install -g pnpm 
+COPY package.json pnpm-lock.yaml* ./
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+COPY ./JS .
+EXPOSE 6379
+
+CMD ["pnpm" , "start-redis"]
+
