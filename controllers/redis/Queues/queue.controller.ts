@@ -5,23 +5,18 @@ import { catchAsync } from "../../../Utils/catchAsync.js";
 import { CreateResponseStrategy } from "../../response.controller.js";
 
 
-const emailQueue = new Queue("email-ops", {
-  connection: {
-    host: "localhost",
-    port: 6379,
-  },
-});
+
 
 const writeOpsQueue = new Queue("write-ops", {
   connection: {
-    host: "localhost",
+    host: "host.docker.internal",
     port: 6379,
   },
 });
 
 const readOpsQueue = new Queue("read-ops", {
   connection: {
-    host: "localhost",
+    host: "host.docker.internal",
     port: 6379,
   },
 });

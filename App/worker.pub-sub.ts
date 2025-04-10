@@ -1,10 +1,10 @@
 import { createClient, type RedisClientType } from "redis";
 
 export const redisSub: RedisClientType = createClient({
-  url: "redis://localhost:6379",
+  url: "redis://host.docker.internal:6379",
 });
 export const redisPub: RedisClientType = createClient({
-  url: "redis://localhost:6379",
+  url: "redis://host.docker.internal:6379",
 });
 redisSub.on("error", (err) =>
   console.log("Redis Client Error with subscriber", err)
