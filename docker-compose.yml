@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  backend-worker:
+    image: kaneki003/autochronos:worker
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.labels.role == worker
+    extra_hosts:
+      - "host.docker.internal:13.127.179.22"
+
+  backend-scheduler:
+    image: kaneki003/autochronos:scheduler
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == manager
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "3000:3000" # 🛠️ Fixed indentation and spacing
+
+  backend-redis:
+    image: redis:latest
+    deploy:
+      mode: replicated
+      replicas: 1

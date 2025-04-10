@@ -1,1 +1,0 @@
-rm -rf "/home/kaneki003/test1"
