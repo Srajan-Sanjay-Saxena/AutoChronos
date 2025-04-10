@@ -1,6 +1,6 @@
+import { Worker } from "bullmq";
 import writeController from "../controllers/redis/Workers/write.controller.js";
 import readController from "../controllers/redis/Workers/read.controller.js";
-import { Worker } from "bullmq";
 
 // Why the name readWorker in both cases and also why you aren't giving actual error as well?
 const writeOpsWorker = async () => {
